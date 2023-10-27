@@ -11,6 +11,6 @@ setup(
     version=VERSION,
     author='Adam Mika',
     description='Package for obtaining location on screen where user is looking.',
-    packages=['gaze_tracking'],
+    packages=['src'],
     install_requires=requirements,  # Specify requirements here
 )

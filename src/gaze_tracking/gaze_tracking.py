@@ -5,8 +5,7 @@ import dlib
 from .eye import Eye
 from .calibration import Calibration
 import numpy as np
-from config import *
-from scipy.stats import skew
+from src.config import *
 
 
 class GazeTracking(object):

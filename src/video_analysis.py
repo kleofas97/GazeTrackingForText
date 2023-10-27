@@ -1,8 +1,8 @@
 import os
 import cv2
 import matplotlib.pyplot as plt
-from gaze_tracking import GazeTracking
-from config import *
+from src.gaze_tracking import GazeTracking
+from src.config import *
 from tqdm import tqdm
 import logging
 import datetime
@@ -12,7 +12,7 @@ import json
 log = logging.getLogger("video_analysis")
 logging.basicConfig(level = logging.INFO)
 
-def calculate_circle_position(value, image_width):
+def calculate_circle_position_percentage(value, image_width):
     # Define the left and right positions for the circle
     left_position = MIN_RATIO
     right_position = MAX_RATIO
@@ -23,10 +23,12 @@ def calculate_circle_position(value, image_width):
     # Calculate the horizontal position of the circle using linear interpolation
     circle_x = int((value - left_position) / (right_position - left_position) * image_width)
 
-    return circle_x
+    percent_value = circle_x/ image_width * 100
+
+    return circle_x, percent_value
 
 
-def analyze_video(path, max_x: int, output_path_video: str, show=False):
+def analyze_video(path, max_x: int, output_path_video=None, show=False):
     gaze = GazeTracking()
     cap = cv2.VideoCapture(path)
     total_frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -45,8 +47,8 @@ def analyze_video(path, max_x: int, output_path_video: str, show=False):
                 gaze.refresh(frame)
                 ratio = gaze.horizontal_ratio()
                 if ratio:
-                    circle_x = calculate_circle_position(ratio, max_x)
-                    points.append(circle_x)
+                    circle_x, circle_per = calculate_circle_position_percentage(ratio, max_x)
+                    points.append(circle_per)
                     if show:
                         frame = cv2.circle(frame, (circle_x, int(frame.shape[0] / 2)), radius=20, color=(0, 0, 255),
                                            thickness=-1)

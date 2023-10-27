@@ -2,7 +2,7 @@ import math
 import numpy as np
 import cv2
 from .pupil import Pupil
-from config import *
+from src.config import *
 
 
 class Eye(object):
